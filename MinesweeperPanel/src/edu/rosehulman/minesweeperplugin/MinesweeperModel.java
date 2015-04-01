@@ -15,7 +15,7 @@ public class MinesweeperModel {
 	private Spot[][] field;
 
 	public MinesweeperModel() {
-		initMinesweeper(20, 20, 10);
+		initMinesweeper(20, 20, 52);
 	}
 
 	private void initMinesweeper(int width, int height, int mines) {
