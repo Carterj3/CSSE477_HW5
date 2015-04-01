@@ -1,8 +1,12 @@
 package edu.rosehulman.okplugin;
+
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-public class okpanel extends JPanel {
+import edu.rosehulman.mjcommons.Message;
+import edu.rosehulman.mjcommons.mjPanel;
+
+public class okpanel extends mjPanel {
 
 	/**
 	 * 
@@ -13,5 +17,19 @@ public class okpanel extends JPanel {
 		JButton ok = new JButton("OK");
 		this.add(ok);
 	}
-	
+
+	@Override
+	public void stop() {
+
+	}
+
+	@Override
+	public Message getMessage() {
+		return null;
+	}
+
+	@Override
+	public void receiveMessage(Message m) {
+	}
+
 }

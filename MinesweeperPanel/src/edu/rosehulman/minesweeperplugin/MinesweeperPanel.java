@@ -1,9 +1,13 @@
 package edu.rosehulman.minesweeperplugin;
 
 import java.awt.GridLayout;
+
 import javax.swing.JPanel;
 
-public class MinesweeperPanel extends JPanel {
+import edu.rosehulman.mjcommons.Message;
+import edu.rosehulman.mjcommons.mjPanel;
+
+public class MinesweeperPanel extends mjPanel {
 
 	/**
 	 * 
@@ -72,6 +76,21 @@ public class MinesweeperPanel extends JPanel {
 				buttons[w][h].gameOver();
 			}
 		}
+	}
+
+	@Override
+	public void stop() {
+		
+	}
+
+	@Override
+	public Message getMessage() {
+		return null;
+	}
+
+	@Override
+	public void receiveMessage(Message m) {
+		
 	}
 
 }

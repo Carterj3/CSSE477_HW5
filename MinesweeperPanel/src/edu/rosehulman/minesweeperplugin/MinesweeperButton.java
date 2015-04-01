@@ -1,6 +1,7 @@
 package edu.rosehulman.minesweeperplugin;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -24,6 +25,7 @@ public class MinesweeperButton extends JButton implements MouseListener {
 		this.y = y;
 		
 		this.setMargin(new Insets(0, 0, 0, 0));
+		this.setPreferredSize(new Dimension(5,5));
 		
 		updateDiplay();
 		this.addMouseListener(this);
