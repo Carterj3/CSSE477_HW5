@@ -2,6 +2,8 @@ package edu.rosehulman.minesweeperplugin;
 
 import java.util.Random;
 
+import javax.naming.ldap.PagedResultsControl;
+
 public class MinesweeperModel {
 
 	private static final Mine Mine = new Mine();
@@ -14,8 +16,8 @@ public class MinesweeperModel {
 
 	private Spot[][] field;
 
-	public MinesweeperModel() {
-		initMinesweeper(20, 20, 52);
+	public MinesweeperModel(int width, int height, int mines) {
+		initMinesweeper(width, height, mines);
 	}
 
 	private void initMinesweeper(int width, int height, int mines) {
@@ -109,7 +111,6 @@ public class MinesweeperModel {
 				}
 			}
 		}
-		System.out.println("Spotsleft : "+spotsLeft+" | mines : "+mines);
 		return (spotsLeft == mines);
 	}
 
@@ -123,6 +124,10 @@ public class MinesweeperModel {
 			}
 		}
 		return numBombs;
+	}
+
+	public int getMines() {
+		return this.mines;
 	}
 
 }

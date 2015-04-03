@@ -1,6 +1,5 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
@@ -11,7 +10,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 
 public class PluginFrame extends JFrame {
 
@@ -86,7 +84,6 @@ public class PluginFrame extends JFrame {
 	public void updateDisplay() {
 		this.repaint();
 		this.setVisible(true);
-		this.pack();
 	}
 
 	public void appendStatusMessage(String message) {

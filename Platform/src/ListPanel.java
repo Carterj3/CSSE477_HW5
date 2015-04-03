@@ -75,12 +75,16 @@ public class ListPanel extends JPanel {
 							System.out.println(filename);
 							if (kind == ENTRY_DELETE) {
 								parentFrame.stop(filename.toString());
-								ListPanel.this.remove(JButtonMap
-										.remove(filename.toString()));
+
+								JButton removedButton = JButtonMap
+										.remove(filename.toString());
+								if (removedButton != null) {
+									ListPanel.this.remove(removedButton);
+								}
+
 								updateDisplay();
 							}
-							
-							
+
 							// This key is registered only
 							// for ENTRY_CREATE events,
 							// but an OVERFLOW event can
@@ -90,7 +94,7 @@ public class ListPanel extends JPanel {
 								continue;
 							}
 
-							if(kind == ENTRY_CREATE){
+							if (kind == ENTRY_CREATE) {
 								scanForPlugins();
 								updateDisplay();
 							}
@@ -121,7 +125,7 @@ public class ListPanel extends JPanel {
 		this.repaint();
 		this.setVisible(true);
 		parentFrame.updateDisplay();
-		
+
 	}
 
 	private void loadConfig() {
@@ -157,9 +161,11 @@ public class ListPanel extends JPanel {
 									public void actionPerformed(ActionEvent e) {
 										parentFrame
 												.setSelectedPlugin(item.jarName);
-										System.out.println("Selecting "
-												+ item.jarName + " | "
-												+ filename);
+										parentFrame
+												.appendStatusMessage("Selecting "
+														+ item.jarName
+														+ " | "
+														+ filename);
 									}
 								});
 								temp.setBackground(Color.RED);
@@ -169,7 +175,7 @@ public class ListPanel extends JPanel {
 							}
 
 						} catch (Exception e) {
-							System.out.println("ConfigItem : "
+							parentFrame.appendStatusMessage("ConfigItem : "
 									+ item.toString());
 							e.printStackTrace();
 						}
@@ -196,18 +202,17 @@ public class ListPanel extends JPanel {
 	}
 
 	public void pluginStopped(String plugin) {
-		JButton pluginButton =JButtonMap.get(plugin);
-		if(pluginButton!= null){
+		JButton pluginButton = JButtonMap.get(plugin);
+		if (pluginButton != null) {
 			pluginButton.setBackground(Color.RED);
 		}
 	}
 
 	public void pluginStarted(String plugin) {
-		JButton pluginButton =JButtonMap.get(plugin);
-		if(pluginButton!= null){
+		JButton pluginButton = JButtonMap.get(plugin);
+		if (pluginButton != null) {
 			pluginButton.setBackground(Color.GREEN);
 		}
 	}
-	
 
 }

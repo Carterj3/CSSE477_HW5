@@ -11,6 +11,10 @@ import edu.rosehulman.mjcommons.Message;
 import edu.rosehulman.mjcommons.mjPanel;
 
 public class ExecutionPanel extends JPanel {
+	/**
+	 * W
+	 */
+	private static final long serialVersionUID = -6471616503764395380L;
 	private String selectedPlugin;
 	private PluginFrame parentFrame;
 	private HashMap<String, mjPanel> map = new HashMap<String, mjPanel>();
@@ -31,7 +35,8 @@ public class ExecutionPanel extends JPanel {
 							f.toURI().toURL(), null });
 					Class<mjPanel> clazz = (Class<mjPanel>) cl
 							.loadClass(item.packageName + "." + item.className);
-					return clazz.newInstance();
+					mjPanel instance = clazz.newInstance();
+					return instance;
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -48,16 +53,17 @@ public class ExecutionPanel extends JPanel {
 			plugin.setVisible(true);
 			plugin.repaint();
 
-			startMonitor(map.get(this.selectedPlugin));
+			messageMap.put(this.selectedPlugin,
+					startMonitor(map.get(this.selectedPlugin)));
 			this.add(map.get(this.selectedPlugin));
-			
+
 			parentFrame.pluginStarted(this.selectedPlugin);
 		}
 
 		this.updateDisplay();
 	}
 
-	private void startMonitor(mjPanel plugin) {
+	private Thread startMonitor(mjPanel plugin) {
 		Thread t = new Thread(new Runnable() {
 
 			@Override
@@ -66,7 +72,7 @@ public class ExecutionPanel extends JPanel {
 					Message recv = plugin.getMessage();
 					if (recv == null) {
 						try {
-							Thread.sleep(2000);
+							Thread.sleep(200);
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}
@@ -76,19 +82,26 @@ public class ExecutionPanel extends JPanel {
 					if (recv.receiver == parentFrame.getMessageName()) {
 						parentFrame.appendStatusMessage(recv.message);
 					}
-
-					sendMessage(recv);
+					for (;;) {
+						try {
+							sendMessage(recv);
+							break;
+						} catch (Exception e) {
+							Thread.yield();
+						}
+					}
 
 				}
 			}
 		});
 
 		t.start();
+		return t;
 	}
 
 	protected void sendMessage(Message recv) {
 		for (String jars : map.keySet()) {
-			if (jars == recv.receiver) {
+			if (jars.equals(recv.receiver)) {
 				map.get(jars).receiveMessage(recv);
 			}
 		}
@@ -104,7 +117,7 @@ public class ExecutionPanel extends JPanel {
 		}
 		removedPanel = null;
 		this.updateDisplay();
-		
+
 		parentFrame.pluginStopped(this.selectedPlugin);
 	}
 
@@ -112,6 +125,15 @@ public class ExecutionPanel extends JPanel {
 		this.setVisible(true);
 		this.repaint();
 		parentFrame.updateDisplay();
+
+		if (this.selectedPlugin != null) {
+			mjPanel currentPanel = map.get(this.selectedPlugin);
+			if (currentPanel != null) {
+				currentPanel.repaint();
+				currentPanel.setVisible(true);
+			}
+
+		}
 	}
 
 	public void setSelectedPlugin(String jarName) {
@@ -135,16 +157,16 @@ public class ExecutionPanel extends JPanel {
 
 	public void stop(String filename) {
 		mjPanel removedpanel = map.remove(filename);
-		if(removedpanel != null){
+		if (removedpanel != null) {
 			this.remove(removedpanel);
 			removedpanel.stop();
 		}
 		Thread t = messageMap.remove(filename);
-		if(t != null){
+		if (t != null) {
 			t.stop();
 			t = null;
 		}
-		
+
 	}
 
 }
